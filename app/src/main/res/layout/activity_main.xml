@@ -25,18 +25,6 @@
         android:textStyle="bold"
         tools:ignore="RtlHardcoded,RtlSymmetry" />
 
-    <TextView
-        android:id="@+id/barcode_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/status_message"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/status_message"
-        android:layout_below="@+id/status_message"
-        android:layout_marginTop="110dp"
-        android:textAlignment="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        tools:ignore="RtlHardcoded" />
 
     <Button
         android:id="@+id/read_barcode"
@@ -52,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/barcode_value"
+        android:layout_below="@+id/status_message"
         android:layout_marginTop="66dp"
         android:checked="false"
         android:text="@string/auto_focus"

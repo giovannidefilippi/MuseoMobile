@@ -5,17 +5,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by Giovanni on 30/10/2017.
@@ -23,22 +30,38 @@ import java.util.HashMap;
 
 public class SchedaReperto extends Activity implements View.OnClickListener{
 
-    private final String TAG = MainActivity.class.getSimpleName();
+
+    private final String TAG = SchedaReperto.class.getSimpleName();
 
     private TextView statusMessage;
     private static final int RC_BARCODE_CAPTURE = 9001;
     private String operaId;
 
-    private String ip= "192.168.1.101";
-    //private String ip="192.168.1.74";
-    private TextView descrizShort;//modificare prova
-    private TextView idView;
+    //private String ip= "192.168.1.101";
+    private String ip="192.168.1.74";
+    private TextView descrizShort;
+    private TextView titolo;
+    private TextView annoPubblicazione;
+    private TextView dimensione;
+    private TextView periodoStorico;
+    private TextView peso;
+    private TextView cultura;
+    private TextView valore;
+    private TextView proprietario;
+    private TextView autore;
+    private TextView tipo;
+    private ImageView immagine;
+
+    private String vsTipologia;
+    private String vsArtista;
 
     private HashMap<String, String> operaDarte;
-    //private JSONArray opera;
+    private HashMap<String, String> artista;
+    private HashMap<String, String> tipologia;
 
-
-
+    TextToSpeech lettoreTesto;
+    Button audioDescrizione;
+    Button stopButton;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +71,79 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
         String pkg = getPackageName();
 
         operaDarte =  new HashMap<>();
+        artista =  new HashMap<>();
+        tipologia =  new HashMap<>();
+
+        audioDescrizione=(Button)findViewById(R.id.audioDescrizioneButton);
+        stopButton=(Button)findViewById(R.id.stopButton);
+
+
         statusMessage = (TextView)findViewById(R.id.status_message);
-        idView = (TextView) findViewById(R.id.operaId);
-        descrizShort = (TextView) findViewById(R.id.descrizione);
+        titolo = (TextView) findViewById(R.id.titolo);
+        descrizShort = (TextView) findViewById(R.id.descrizShort);
+        annoPubblicazione = (TextView) findViewById(R.id.annoPubblicazione);
+        dimensione = (TextView) findViewById(R.id.dimensione);
+        periodoStorico = (TextView) findViewById(R.id.periodoStorico);
+        peso = (TextView) findViewById(R.id.peso);
+        cultura = (TextView) findViewById(R.id.cultura);
+        valore = (TextView) findViewById(R.id.valore);
+        proprietario = (TextView) findViewById(R.id.proprietario);
+        autore = (TextView) findViewById(R.id.autore);
+        tipo = (TextView) findViewById(R.id.tipo);
+
+        immagine= (ImageView) findViewById(R.id.immagine);
+
         operaId = (String)intent.getSerializableExtra(pkg + ".operaId");
 
+
         new GetOpera().execute();
+        new GetArtista().execute();
+        new GetTipo().execute();
+
+        lettoreTesto=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    lettoreTesto.setLanguage(Locale.ITALIAN);
+                }
+            }
+        });
+
+        audioDescrizione.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String toSpeak = descrizShort.getText().toString();
+                Toast.makeText(getApplicationContext(), toSpeak,Toast.LENGTH_SHORT).show();
+                lettoreTesto.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               if(lettoreTesto !=null){
+                    lettoreTesto.stop();
+                    if(!lettoreTesto.isSpeaking()){
+                        Toast.makeText(getApplicationContext(), "Audio Lettore non attivo ! ",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
+        });
+
+    }
+
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
+
+        super.onActivityResult(reqCode, resCode, data);
+
+        if (resCode == RESULT_OK) {
+            String pkg = getPackageName();
+            operaId = (String)data.getSerializableExtra(pkg + ".operaId");
+
+        }
+
+
     }
 
     private class GetOpera extends AsyncTask<Void, Void, Void> {
@@ -68,11 +158,11 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
-            String url = "http://"+ip+":8000/api/OperaDarte/";//http://10.0.2.2:8000/api/Rilevazione/
+            String url = "http://"+ip+":8000/api/OperaDarte/";
             String jsonStr = sh.makeServiceCall(url);
 
 
-            Log.e(TAG, "Response from url: " + jsonStr);
+            Log.i(TAG, "Response from url: " + jsonStr);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
@@ -85,40 +175,132 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
                             if(c.getString("id").equals( operaId)){
 
                                 String idOpera = c.getString("id");
-                                String AnnoPubblicazione = c.getString("AnnoPubblicazione");
+                                String annoPubblicazione = c.getString("AnnoPubblicazione");
                                 String titolo = c.getString("Titolo");
                                 String descrizioneShort = c.getString("DescrizioneShort");
                                 String descrizioneEstesa = c.getString("DescrizioneEstesa");
                                 String vsMuseo = c.getString("vsMuseo");
-                                String vsTipologia = c.getString("vsTipologia");  // tipologia get
-                                String vsArtista = c.getString("vsArtista"); // artista get
+                                vsTipologia = c.getString("vsTipologia");  // tipologia get
+                                vsArtista = c.getString("vsArtista"); // artista get
+                                String dimensione = c.getString("Dimensione");
+                                String periodo = c.getString("Periodo");
+                                String peso = c.getString("Peso");
+                                String cultura = c.getString("Cultura");
+                                String valore = c.getString("Valore");
+                                String proprietario = c.getString("Proprietario");
 
+
+                                String immagine=c.getString("Immagine");
                                 String audio = c.getString("Audio");
                                 String video = c.getString("Video");       // da completare
 
                                 operaDarte.put("idOperaDarte",idOpera);
                                 operaDarte.put("Titolo",titolo);
                                 operaDarte.put("DescrizioneShort",descrizioneShort);
-                                operaDarte.put("","");
-                                operaDarte.put("","");
-                                operaDarte.put("","");
+                                operaDarte.put("AnnoPubblicazione",annoPubblicazione);
+                                operaDarte.put("Dimensione",dimensione);
+                                operaDarte.put("Periodo",periodo);
+                                operaDarte.put("Peso",peso);
+                                operaDarte.put("Cultura",cultura);
+                                operaDarte.put("Valore",valore);
+                                operaDarte.put("Proprietario",proprietario);
+                                operaDarte.put("Immagine",immagine);
+                                operaDarte.put("Audio",audio);
+                                operaDarte.put("Video",video);
 
-                                System.out.println(operaDarte.get("Titolo"));
 
+                                }
+                         }
+
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
-                        //id.setText(c.getString("Titolo"));
-                        /*String time = c.getString("Timestamp");
-                        String[] timeSplit = time.replace("T"," ").replace("Z","").split("[- :]");
-                        String day = timeSplit[2];
-                        String month = (Integer.parseInt(timeSplit[1]))+"";
-                        String year = timeSplit[0].substring(2,4);
-                        String hours = (Integer.parseInt(timeSplit[3])+2)+"";
-                        String minutes = timeSplit[4];
-                        String seconds = timeSplit[5].substring(0,2);
-                        HashMap<String, String> detec = new HashMap<>();
-                        detec.put("timeStamp",day+" "+month+" "+year+"  "+hours+":"+minutes+":"+seconds);
-                        detec.put("detection",c.getInt("IdRilevazione")+"");
-                        opereDarte.add(detec);*/
+                    });
+
+                }
+
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            titolo.setText(operaDarte.get("Titolo"));
+            descrizShort.setText(operaDarte.get("DescrizioneShort"));
+            annoPubblicazione.setText("Pubblicato nel "+operaDarte.get("AnnoPubblicazione"));
+            dimensione.setText("Dimensioni : "+operaDarte.get("Dimensione"));
+            periodoStorico.setText("Periodo storico  "+operaDarte.get("Periodo"));
+            peso.setText("Peso "+operaDarte.get("Peso"));
+            cultura.setText("Cultura  "+operaDarte.get("Cultura"));
+            valore.setText("Valore in $ "+operaDarte.get("Valore"));
+            proprietario.setText("Proprietario \n"+operaDarte.get("Proprietario"));
+            //System.out.println(operaDarte.get("Immagine"));
+            Context context = getApplicationContext();
+            Glide.with(context)
+                    .load("http://192.168.1.74:8088/img/"+operaDarte.get("Immagine"))
+                    .into(immagine);
+
+        }
+    }
+
+    private class GetArtista extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Toast.makeText(MainActivity.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            String url = "http://"+ip+":8000/api/Artista/";
+            String jsonStr = sh.makeServiceCall(url);
+
+
+            Log.i(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting JSON Array node
+                    String length = jsonObj.getString("length");
+                    JSONArray artisti = jsonObj.getJSONArray("json");
+                    for(int i = 0;i<artisti.length();i++) {
+                        JSONObject c = artisti.getJSONObject(i);
+                        if(c.getString("id").equals( vsArtista)){
+
+                            String idArtista = c.getString("id");
+                            String nome = c.getString("Nome");
+                            String cognome = c.getString("Cognome");
+                            String nazionalita = c.getString("Nazionalita");
+
+
+                            artista.put("idArtista",idArtista);
+                            artista.put("Nome",nome);
+                            artista.put("Cognome",cognome);
+                            artista.put("Nazionalita",nazionalita);
+                        }
                     }
 
 
@@ -153,12 +335,104 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            idView.setText(operaDarte.get("Titolo"));
-            descrizShort.setText(operaDarte.get("DescrizioneShort"));
+            autore.setText(artista.get("Nome")+" "+artista.get("Cognome")+ " \n\n "+artista.get("Nazionalita"));
+
+
+        }
+    }
+
+    private class GetTipo extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //Toast.makeText(MainActivity.this,"Json Data is downloading",Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... arg0) {
+            HttpHandler sh = new HttpHandler();
+            // Making a request to url and getting response
+            String url = "http://"+ip+":8000/api/Tipologia/";//http://10.0.2.2:8000/api/Rilevazione/
+            String jsonStr = sh.makeServiceCall(url);
+
+
+            Log.i(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+
+                    // Getting JSON Array node
+                    String length = jsonObj.getString("length");
+                    JSONArray tipologie = jsonObj.getJSONArray("json");
+                    for(int i = 0;i<tipologie.length();i++) {
+                        JSONObject c = tipologie.getJSONObject(i);
+                        if(c.getString("id").equals( vsTipologia)){
+
+                            String idTipo = c.getString("id");
+                            String tecnica = c.getString("Tecnica");
+
+                            tipologia.put("idTipo",idTipo);
+                            tipologia.put("Tecnica",tecnica);
+
+                        }
+                    }
+
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            tipo.setText("Tecnica  "+tipologia.get("Tecnica"));
+
+
         }
     }
 
 
+    public void contenutiAudio(View button) {
+        Intent audio_intent = new Intent(this,AudioPlayer.class);
+        String pkg = getPackageName();
+        audio_intent.putExtra(pkg+".audio",operaDarte.get("Audio"));
+        audio_intent.putExtra(pkg+".operaId",operaId);
+        startActivityForResult(audio_intent, 1);
+
+        }
+    public void contenutiVideo(View button) {
+       // Intent video_intent = new Intent(this,VideoPlayer2.class);       //  video player 2
+        Intent video_intent = new Intent(this,VideoPlayer.class);  // video player
+        String pkg = getPackageName();
+        video_intent.putExtra(pkg+".video",operaDarte.get("Video"));
+        video_intent.putExtra(pkg+".operaId",operaId);
+        startActivityForResult(video_intent, 1);
+    }
 
     public void onClick(View v) {
 
@@ -183,6 +457,10 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
     protected void onResume() {
         Log.i(TAG, "onResume()");
         super.onResume();
+        if(lettoreTesto !=null){
+            lettoreTesto.stop();
+            lettoreTesto.shutdown();
+        }
     }
 
     @Override
@@ -201,7 +479,13 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
     protected void onDestroy() {
         Log.i(TAG, "onDestroy()");
         super.onDestroy();
+        if(lettoreTesto !=null){
+            lettoreTesto.stop();
+            lettoreTesto.shutdown();
+        }
     }
+
+
 
 
 }

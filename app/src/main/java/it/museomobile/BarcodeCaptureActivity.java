@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -45,6 +46,10 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -432,8 +437,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         Intent schedaReperto_intent = new Intent(this,SchedaReperto.class);
         String pkg = getPackageName();
         schedaReperto_intent.putExtra(pkg+".operaId",barcode.displayValue);
-        /*lastDetection_intent.putExtra(pkg+".ip",(Serializable)ip);
-        lastDetection_intent.putExtra(pkg+".sensors",sensorsList);*/
+
         startActivityForResult(schedaReperto_intent, 1);
     }
+
+
 }
