@@ -102,14 +102,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
     @Override
     protected void onStart() {
-        Log.i(TAG, "onStart()");
         super.onStart();
+        Log.i(TAG, "onStart()");
+
     }
 
     @Override
     protected void onResume() {
-        Log.i(TAG, "onResume()");
         super.onResume();
+        Log.i(TAG, "onResume()");
+
     }
 
     @Override
@@ -120,14 +122,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onStop() {
-        Log.i(TAG, "onStop()");
         super.onStop();
+        Log.i(TAG, "onStop()");
+
     }
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "onDestroy()");
         super.onDestroy();
+        Log.i(TAG, "onDestroy()");
+
     }
 
 }

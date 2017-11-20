@@ -107,32 +107,37 @@ public class AudioPlayer extends Activity {
     }
 
     protected void onStart() {
-        Log.i(TAG, "onStart()");
         super.onStart();
+        Log.i(TAG, "onStart()");
+
     }
 
     @Override
     protected void onResume() {
-        Log.i(TAG, "onResume()");
         super.onResume();
+        Log.i(TAG, "onResume()");
+
     }
 
     @Override
     protected void onPause() {
-        Log.i(TAG, "onPause()");
         super.onPause();
+        Log.i(TAG, "onPause()");
+
     }
 
     @Override
     protected void onStop() {
-        Log.i(TAG, "onStop()");
         super.onStop();
+        Log.i(TAG, "onStop()");
+
     }
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "onDestroy()");
         super.onDestroy();
+        Log.i(TAG, "onDestroy()");
+
         mp.release();
         mp = null;
     }

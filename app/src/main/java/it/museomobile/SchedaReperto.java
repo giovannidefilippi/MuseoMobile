@@ -449,14 +449,15 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
     }
     @Override
     protected void onStart() {
-        Log.i(TAG, "onStart()");
         super.onStart();
+        Log.i(TAG, "onStart()");
+
     }
 
     @Override
     protected void onResume() {
-        Log.i(TAG, "onResume()");
         super.onResume();
+        Log.i(TAG, "onResume()");
         if(lettoreTesto !=null){
             lettoreTesto.stop();
             lettoreTesto.shutdown();
@@ -465,21 +466,23 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
 
     @Override
     protected void onPause() {
-        Log.i(TAG, "onPause()");
         super.onPause();
+        Log.i(TAG, "onPause()");
+
     }
 
     @Override
     protected void onStop() {
-        Log.i(TAG, "onStop()");
         super.onStop();
+        Log.i(TAG, "onStop()");
+
     }
 
     @Override
     protected void onDestroy() {
-        Log.i(TAG, "onDestroy()");
         super.onDestroy();
-        if(lettoreTesto !=null){
+        Log.i(TAG, "onDestroy()");
+       if(lettoreTesto !=null){
             lettoreTesto.stop();
             lettoreTesto.shutdown();
         }
