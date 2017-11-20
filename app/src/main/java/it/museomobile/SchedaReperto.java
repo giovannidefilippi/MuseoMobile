@@ -466,26 +466,26 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
 
     @Override
     protected void onPause() {
-        super.onPause();
         Log.i(TAG, "onPause()");
+        super.onPause();
 
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
         Log.i(TAG, "onStop()");
+        super.onStop();
 
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         Log.i(TAG, "onDestroy()");
        if(lettoreTesto !=null){
             lettoreTesto.stop();
             lettoreTesto.shutdown();
         }
+        super.onDestroy();
     }
 
 

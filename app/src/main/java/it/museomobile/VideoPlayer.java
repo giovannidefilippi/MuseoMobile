@@ -112,24 +112,24 @@ public class VideoPlayer extends Activity implements SurfaceHolder.Callback {
 
     @Override
     protected void onPause() {
-        super.onPause();
         Log.i(TAG, "onPause()");
+        super.onPause();
 
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
         Log.i(TAG, "onStop()");
+        super.onStop();
 
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         Log.i(TAG, "onDestroy()");
         mediaPlayer.release();
         mediaPlayer = null;
+        super.onDestroy();
     }
 
 
