@@ -11,9 +11,6 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.barcode.Barcode;
-
 /**
  * Main activity demonstrating how to pass extra parameters to an activity that
  * reads barcodes.

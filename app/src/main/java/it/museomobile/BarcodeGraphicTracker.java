@@ -18,8 +18,7 @@ package it.museomobile;
 import android.content.Context;
 import android.support.annotation.UiThread;
 
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.Tracker;
+import com.google.android.gms.vision.*;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import it.museomobile.ui.camera.GraphicOverlay;

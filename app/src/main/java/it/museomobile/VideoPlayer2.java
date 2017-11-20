@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
-import java.io.IOException;
+
 
 /**
  * Created by Giovanni on 17/11/2017.

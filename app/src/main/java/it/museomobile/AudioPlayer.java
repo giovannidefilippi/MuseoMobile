@@ -9,11 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.SeekBar;
-import android.widget.Toast;
-import android.widget.SeekBar.*;
+
 
 
 /**

@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -162,7 +161,7 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
             String jsonStr = sh.makeServiceCall(url);
 
 
-            Log.i(TAG, "Response from url: " + jsonStr);
+            //Log.i(TAG, "Response from url: " + jsonStr);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
@@ -214,7 +213,7 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
 
 
                 } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    //Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -278,7 +277,7 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
             String jsonStr = sh.makeServiceCall(url);
 
 
-            Log.i(TAG, "Response from url: " + jsonStr);
+            //Log.i(TAG, "Response from url: " + jsonStr);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
@@ -305,7 +304,7 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
 
 
                 } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    //Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -357,7 +356,7 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
             String jsonStr = sh.makeServiceCall(url);
 
 
-            Log.i(TAG, "Response from url: " + jsonStr);
+            //Log.i(TAG, "Response from url: " + jsonStr);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
@@ -380,7 +379,7 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
 
 
                 } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    //Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -393,7 +392,7 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
                 }
 
             } else {
-                Log.e(TAG, "Couldn't get json from server.");
+                //Log.e(TAG, "Couldn't get json from server.");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
