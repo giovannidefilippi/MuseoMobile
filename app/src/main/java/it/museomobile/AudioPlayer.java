@@ -52,7 +52,7 @@ public class AudioPlayer extends Activity {
                 sk.setProgress((int)startTime);
                 handler.postDelayed(this, 100);
             } catch (Exception e) {
-                e.printStackTrace();
+
             }
         }
     };
@@ -69,7 +69,7 @@ public class AudioPlayer extends Activity {
             }
             handler.postDelayed(updateBar,100);
         } catch (IllegalStateException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -78,7 +78,7 @@ public class AudioPlayer extends Activity {
         try {
             mp.pause();
         } catch (IllegalStateException e) {
-            e.printStackTrace();
+
         }
     }
 
@@ -88,7 +88,7 @@ public class AudioPlayer extends Activity {
             mp.pause();
             mp.seekTo(0);
         } catch (IllegalStateException e) {
-            e.printStackTrace();
+
         }
     }
 
