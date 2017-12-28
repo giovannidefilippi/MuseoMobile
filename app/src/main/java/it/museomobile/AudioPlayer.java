@@ -15,10 +15,6 @@ import android.widget.SeekBar;
 import java.io.IOException;
 
 
-/**
- * Created by Giovanni on 16/11/2017.
- */
-
 public class AudioPlayer extends Activity {
 
     private static final String TAG =AudioPlayer.class.getSimpleName();

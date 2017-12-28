@@ -13,19 +13,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Locale;
-
-/**
- * Created by Giovanni on 30/10/2017.
- */
 
 public class SchedaReperto extends Activity implements View.OnClickListener{
 
@@ -54,13 +47,15 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
     private String vsTipologia;
     private String vsArtista;
 
+
     private HashMap<String, String> operaDarte;
     private HashMap<String, String> artista;
     private HashMap<String, String> tipologia;
 
-    TextToSpeech lettoreTesto;
-    Button audioDescrizione;
-    Button stopButton;
+    private TextToSpeech lettoreTesto;
+    private Button audioDescrizione;
+    private Button stopButton;
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +186,8 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
 
                                 String immagine=c.getString("Immagine");
                                 String audio = c.getString("Audio");
-                                String video = c.getString("Video");       // da completare
+                                String video = c.getString("Video");
+
 
                                 operaDarte.put("idOperaDarte",idOpera);
                                 operaDarte.put("Titolo",titolo);
@@ -414,6 +410,8 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
 
         }
     }
+
+
 
 
     public void contenutiAudio(View button) {
