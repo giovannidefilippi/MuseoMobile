@@ -423,8 +423,7 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
 
         }
     public void contenutiVideo(View button) {
-        Intent video_intent = new Intent(this,VideoPlayer2.class);       //  video player 2
-        //Intent video_intent = new Intent(this,VideoPlayer.class);  // video player
+        Intent video_intent = new Intent(this,VideoPlayer.class);
         String pkg = getPackageName();
         video_intent.putExtra(pkg+".video",operaDarte.get("Video"));
         video_intent.putExtra(pkg+".operaId",operaId);

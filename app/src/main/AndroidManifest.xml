@@ -47,10 +47,7 @@
         <activity android:name=".AudioPlayer"
         android:label="@string/lettore"
         />
-        <activity android:name=".VideoPlayer"
-        android:label="@string/lettore"
-        />
-        <activity android:name=".VideoPlayer2"
+         <activity android:name=".VideoPlayer"
             android:label="@string/lettore"
             />
     </application>
