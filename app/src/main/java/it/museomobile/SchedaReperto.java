@@ -156,7 +156,9 @@ public class SchedaReperto extends Activity implements View.OnClickListener{
             String jsonStr = sh.makeServiceCall(url);
 
 
-            //Log.i(TAG, "Response from url: " + jsonStr);
+            if(true)
+                Log.e(TAG, "Json parsing error: ");
+
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
